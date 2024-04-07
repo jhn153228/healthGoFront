@@ -16,6 +16,7 @@ import {
   Space,
 } from 'antd';
 import Axios from 'axios';
+import { API_URL } from '../constants/GlobalConstants';
 import { useAppContext } from '../store';
 
 function Routine() {
@@ -45,7 +46,7 @@ function Routine() {
 
     setWorkDate(date_form);
     const headers = { Authorization: `JWT ${jwtToken}` };
-    Axios.get('http://localhost:8000/api/routines/', {
+    Axios.get(`${API_URL}/api/routines/`, {
       params: { work_date: date_form },
       headers: headers,
     })
@@ -65,7 +66,7 @@ function Routine() {
   const options = [];
   const [workOuts, setWorkOuts] = useState([]);
   useEffect(() => {
-    Axios.get('http://localhost:8000/workouts/')
+    Axios.get(`${API_URL}/workouts/`)
       .then((res) => {
         setWorkOuts(res.data);
       })
@@ -107,7 +108,7 @@ function Routine() {
     const headers = { Authorization: `JWT ${jwtToken}` };
     if (submitState === 'put') {
       Axios.put(
-        'http://localhost:8000/api/routines/1/',
+        `${API_URL}/api/routines/1/`,
         {
           work_date: workDate,
           form_data: formData,
@@ -125,7 +126,7 @@ function Routine() {
     }
     if (submitState === 'post') {
       Axios.post(
-        'http://localhost:8000/api/routines/',
+        `${API_URL}/api/routines/`,
         {
           work_date: workDate,
           form_data: formData,
