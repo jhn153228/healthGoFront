@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { Form, Input, Button, notification } from "antd";
-import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
-import Axios from "axios";
+import { FrownOutlined, SmileOutlined } from '@ant-design/icons';
+import { Button, Form, Input, notification } from 'antd';
+import Axios from 'axios';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../../constants/GlobalConstants';
 
 export default function Signup() {
   const naveigate = useNavigate();
@@ -16,24 +17,24 @@ export default function Signup() {
       setFieldErrors({});
 
       const data = { username, password, bench_1rm, deadlift_1rm, squat_1rm };
-      console.log("data:", data);
+      console.log('data:', data);
       //   예외처리
       try {
-        await Axios.post("http://localhost:8000/accounts/signup/", data);
+        await Axios.post(`${API_URL}/accounts/signup/`, data);
 
         notification.open({
-          message: "회원가입 성공",
-          description: "로그인 페이지로 이동합니다.",
-          icon: <SmileOutlined style={{ color: "#108ee9" }} />,
+          message: '회원가입 성공',
+          description: '로그인 페이지로 이동합니다.',
+          icon: <SmileOutlined style={{ color: '#108ee9' }} />,
         });
 
-        naveigate("/accounts/login");
+        naveigate('/accounts/login');
       } catch (error) {
         if (error.response) {
           notification.open({
-            message: "회원가입 실패",
-            description: "아이디/암호를 확인해주세요.",
-            icon: <FrownOutlined style={{ color: "#ff3333" }} />,
+            message: '회원가입 실패',
+            description: '아이디/암호를 확인해주세요.',
+            icon: <FrownOutlined style={{ color: '#ff3333' }} />,
           });
 
           const { data: fieldsErrorMessages } = error.response;
@@ -42,8 +43,8 @@ export default function Signup() {
               (acc, [fieldName, errors]) => {
                 // errors : ["m1", "m2"].join(" ") => "m1 "m2"
                 acc[fieldName] = {
-                  validateStatus: "error",
-                  help: errors.join(" "),
+                  validateStatus: 'error',
+                  help: errors.join(' '),
                 };
                 return acc;
               },
@@ -57,13 +58,13 @@ export default function Signup() {
   };
 
   return (
-    <Form {...layout} onFinish={onFinish} autoComplete={"false"}>
+    <Form {...layout} onFinish={onFinish} autoComplete={'false'}>
       <Form.Item
-        label="Username"
-        name="username"
+        label='Username'
+        name='username'
         rules={[
-          { required: true, message: "Please input your username!" },
-          { min: 5, message: "5글자 입력해주세요." },
+          { required: true, message: 'Please input your username!' },
+          { min: 5, message: '5글자 입력해주세요.' },
         ]}
         hasFeedback
         {...fieldErrors.username}
@@ -72,50 +73,50 @@ export default function Signup() {
       </Form.Item>
 
       <Form.Item
-        label="Password"
-        name="password"
-        rules={[{ required: true, message: "Please input your password!" }]}
+        label='Password'
+        name='password'
+        rules={[{ required: true, message: 'Please input your password!' }]}
         {...fieldErrors.password}
       >
         <Input.Password />
       </Form.Item>
 
       <Form.Item
-        label="Bench_1rm"
-        name="bench_1rm"
+        label='Bench_1rm'
+        name='bench_1rm'
         rules={[
-          { message: "Bench_1rm" },
+          { message: 'Bench_1rm' },
           {
-            message: "숫자를입력해주세요",
-            pattern: "[0-9]+",
+            message: '숫자를입력해주세요',
+            pattern: '[0-9]+',
           },
         ]}
       >
         <Input />
       </Form.Item>
       <Form.Item
-        label="Squat_1rm"
-        name="squat_1rm"
-        type="number"
+        label='Squat_1rm'
+        name='squat_1rm'
+        type='number'
         rules={[
-          { message: "squat_1rm" },
+          { message: 'squat_1rm' },
           {
-            message: "숫자를입력해주세요",
-            pattern: "[0-9]+",
+            message: '숫자를입력해주세요',
+            pattern: '[0-9]+',
           },
         ]}
       >
         <Input />
       </Form.Item>
       <Form.Item
-        label="Deadlift_1rm"
-        name="deadlift_1rm"
-        type="number"
+        label='Deadlift_1rm'
+        name='deadlift_1rm'
+        type='number'
         rules={[
-          { message: "deadlift_1rm" },
+          { message: 'deadlift_1rm' },
           {
-            message: "숫자를입력해주세요",
-            pattern: "[0-9]+",
+            message: '숫자를입력해주세요',
+            pattern: '[0-9]+',
           },
         ]}
       >
@@ -123,7 +124,7 @@ export default function Signup() {
       </Form.Item>
 
       <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">
+        <Button type='primary' htmlType='submit'>
           Submit
         </Button>
       </Form.Item>
