@@ -7,9 +7,26 @@ import { API_URL } from '../../constants/GlobalConstants';
 
 export default function Signup() {
   const naveigate = useNavigate();
-  const [fieldErrors, setFieldErrors] = useState({});
+  const [fieldErrors, setFieldErrors] = useState<{
+    [key: string]: {
+      validateStatus:
+        | ''
+        | 'error'
+        | 'success'
+        | 'warning'
+        | 'validating'
+        | undefined;
+      help: string;
+    };
+  }>({});
 
-  const onFinish = (values) => {
+  const onFinish = (values: {
+    username: any;
+    password: any;
+    bench_1rm: any;
+    deadlift_1rm: any;
+    squat_1rm: any;
+  }) => {
     async function fn() {
       console.log(values);
       const { username, password, bench_1rm, deadlift_1rm, squat_1rm } = values;
@@ -29,7 +46,7 @@ export default function Signup() {
         });
 
         naveigate('/accounts/login');
-      } catch (error) {
+      } catch (error: any) {
         if (error.response) {
           notification.open({
             message: '회원가입 실패',
@@ -40,7 +57,7 @@ export default function Signup() {
           const { data: fieldsErrorMessages } = error.response;
           setFieldErrors(
             Object.entries(fieldsErrorMessages).reduce(
-              (acc, [fieldName, errors]) => {
+              (acc: any, [fieldName, errors]: [string, any]) => {
                 // errors : ["m1", "m2"].join(" ") => "m1 "m2"
                 acc[fieldName] = {
                   validateStatus: 'error',
@@ -88,7 +105,7 @@ export default function Signup() {
           { message: 'Bench_1rm' },
           {
             message: '숫자를입력해주세요',
-            pattern: '[0-9]+',
+            pattern: new RegExp('[0-9]+'),
           },
         ]}
       >
@@ -97,12 +114,11 @@ export default function Signup() {
       <Form.Item
         label='Squat_1rm'
         name='squat_1rm'
-        type='number'
         rules={[
           { message: 'squat_1rm' },
           {
             message: '숫자를입력해주세요',
-            pattern: '[0-9]+',
+            pattern: new RegExp('[0-9]+'),
           },
         ]}
       >
@@ -111,12 +127,11 @@ export default function Signup() {
       <Form.Item
         label='Deadlift_1rm'
         name='deadlift_1rm'
-        type='number'
         rules={[
           { message: 'deadlift_1rm' },
           {
             message: '숫자를입력해주세요',
-            pattern: '[0-9]+',
+            pattern: new RegExp('[0-9]+'),
           },
         ]}
       >
