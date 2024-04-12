@@ -21,7 +21,7 @@ export default function Signup() {
   }>({});
 
   const onFinish = (values: {
-    username: any;
+    login_id: any;
     password: any;
     bench_1rm: any;
     deadlift_1rm: any;
@@ -29,11 +29,11 @@ export default function Signup() {
   }) => {
     async function fn() {
       console.log(values);
-      const { username, password, bench_1rm, deadlift_1rm, squat_1rm } = values;
+      const { login_id, password, username, email } = values;
 
       setFieldErrors({});
 
-      const data = { username, password, bench_1rm, deadlift_1rm, squat_1rm };
+      const data = { login_id, password, username, email };
       console.log('data:', data);
       //   예외처리
       try {
@@ -77,14 +77,14 @@ export default function Signup() {
   return (
     <Form {...layout} onFinish={onFinish} autoComplete={'false'}>
       <Form.Item
-        label='Username'
-        name='username'
+        label='ID'
+        name='login_id'
         rules={[
-          { required: true, message: 'Please input your username!' },
+          { required: true, message: 'Please input your ID!' },
           { min: 5, message: '5글자 입력해주세요.' },
         ]}
         hasFeedback
-        {...fieldErrors.username}
+        {...fieldErrors.login_id}
       >
         <Input />
       </Form.Item>
@@ -99,43 +99,17 @@ export default function Signup() {
       </Form.Item>
 
       <Form.Item
-        label='Bench_1rm'
-        name='bench_1rm'
-        rules={[
-          { message: 'Bench_1rm' },
-          {
-            message: '숫자를입력해주세요',
-            pattern: new RegExp('[0-9]+'),
-          },
-        ]}
+        label='Name'
+        name='username'
       >
         <Input />
       </Form.Item>
+
       <Form.Item
-        label='Squat_1rm'
-        name='squat_1rm'
-        rules={[
-          { message: 'squat_1rm' },
-          {
-            message: '숫자를입력해주세요',
-            pattern: new RegExp('[0-9]+'),
-          },
-        ]}
+        label='Email'
+        name='email'
       >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        label='Deadlift_1rm'
-        name='deadlift_1rm'
-        rules={[
-          { message: 'deadlift_1rm' },
-          {
-            message: '숫자를입력해주세요',
-            pattern: new RegExp('[0-9]+'),
-          },
-        ]}
-      >
-        <Input />
+        <Input type="email"/>
       </Form.Item>
 
       <Form.Item {...tailLayout}>

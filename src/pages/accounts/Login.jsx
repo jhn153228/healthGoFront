@@ -1,56 +1,54 @@
-import { FrownOutlined, SmileOutlined } from '@ant-design/icons';
-import { Button, Card, Form, Input, notification } from 'antd';
-import Axios from 'axios';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { API_URL } from '../../constants/GlobalConstants';
-import useLocalStorage from '../../utils/useLocalStorage';
+import { FrownOutlined, SmileOutlined } from "@ant-design/icons";
+import { Button, Card, Form, Input, notification } from "antd";
+import Axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { API_URL } from "../../constants/GlobalConstants";
+import useLocalStorage from "../../utils/useLocalStorage";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [jwtToken, setJwtToken] = useLocalStorage('jwtToken', '');
+  const [jwtToken, setJwtToken] = useLocalStorage("jwtToken", "");
   const [fieldErrors, setFieldErrors] = useState({});
 
   const onFinish = (values) => {
     async function fn() {
-      const { username, password } = values;
+      const { login_id, password } = values;
 
       setFieldErrors({});
 
-      const data = { username, password };
+      const data = { login_id, password };
       try {
-        console.log('data : ', data);
+        console.log("data : ", data);
         const response = await Axios.post(`${API_URL}/accounts/token/`, data);
         const {
-          data: { token: jwtToken },
+          data: { access: jwtToken },
         } = response;
 
         setJwtToken(jwtToken);
 
         notification.open({
-          message: '로그인 성공',
-          icon: <SmileOutlined style={{ color: '#108ee9' }} />,
+          message: "로그인 성공",
+          icon: <SmileOutlined style={{ color: "#108ee9" }} />,
         });
 
-        navigate('/routine'); // TODO: 이동 주소
+        navigate("/routine"); // TODO: 이동 주소
+        window.location.reload();
       } catch (error) {
         if (error.response) {
           notification.open({
-            message: '로그인 실패',
-            description: '아이디/암호를 확인해주세요.',
-            icon: <FrownOutlined style={{ color: '#ff3333' }} />,
+            message: "로그인 실패",
+            description: "아이디/암호를 확인해주세요.",
+            icon: <FrownOutlined style={{ color: "#ff3333" }} />,
           });
 
           const { data: fieldsErrorMessages } = error.response;
-          // fieldsErrorMessages => { username: "m1 m2", password: [] }
-          // python: mydict.items()
           setFieldErrors(
             Object.entries(fieldsErrorMessages).reduce(
               (acc, [fieldName, errors]) => {
-                // errors : ["m1", "m2"].join(" ") => "m1 "m2"
                 acc[fieldName] = {
-                  validateStatus: 'error',
-                  help: errors.join(' '),
+                  validateStatus: "error",
+                  help: errors.join(" "),
                 };
                 return acc;
               },
@@ -64,38 +62,38 @@ export default function Login() {
   };
 
   return (
-    <Card title='로그인'>
+    <Card title="로그인">
       <Form
         {...layout}
         onFinish={onFinish}
         //   onFinishFailed={onFinishFailed}
-        autoComplete={'false'}
+        autoComplete={"false"}
       >
         <Form.Item
-          label='Username'
-          name='username'
+          label="ID"
+          name="login_id"
           rules={[
-            { required: true, message: 'Please input your username!' },
-            { min: 5, message: '5글자 입력해주세요.' },
+            { required: true, message: "Please input your ID!" },
+            { min: 5, message: "5글자 입력해주세요." },
           ]}
           hasFeedback
-          {...fieldErrors.username}
+          {...fieldErrors.login_id}
           {...fieldErrors.non_field_errors}
         >
           <Input />
         </Form.Item>
 
         <Form.Item
-          label='Password'
-          name='password'
-          rules={[{ required: true, message: 'Please input your password!' }]}
+          label="Password"
+          name="password"
+          rules={[{ required: true, message: "Please input your password!" }]}
           {...fieldErrors.password}
         >
           <Input.Password />
         </Form.Item>
 
         <Form.Item {...tailLayout}>
-          <Button type='primary' htmlType='submit'>
+          <Button type="primary" htmlType="submit">
             Submit
           </Button>
         </Form.Item>
