@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../constants/GlobalConstants';
 
 export default function Signup() {
-  const naveigate = useNavigate();
+  const navigate = useNavigate();
   const [fieldErrors, setFieldErrors] = useState<{
     [key: string]: {
       validateStatus:
@@ -45,7 +45,7 @@ export default function Signup() {
           icon: <SmileOutlined style={{ color: '#108ee9' }} />,
         });
 
-        naveigate('/accounts/login');
+        navigate('/accounts/login');
       } catch (error: any) {
         if (error.response) {
           notification.open({
@@ -98,18 +98,12 @@ export default function Signup() {
         <Input.Password />
       </Form.Item>
 
-      <Form.Item
-        label='Name'
-        name='username'
-      >
+      <Form.Item label='Name' name='username'>
         <Input />
       </Form.Item>
 
-      <Form.Item
-        label='Email'
-        name='email'
-      >
-        <Input type="email"/>
+      <Form.Item label='Email' name='email'>
+        <Input type='email' />
       </Form.Item>
 
       <Form.Item {...tailLayout}>
