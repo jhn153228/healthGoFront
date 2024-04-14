@@ -1,6 +1,6 @@
 import { Menu } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import LogoImage from '../assets/logo.png';
+import LogoImage from '../assets/logo.svg';
 import { useAppContext } from '../store';
 import './AppLayout.scss';
 
