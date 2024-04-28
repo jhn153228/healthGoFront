@@ -1,15 +1,12 @@
 import { Menu } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import LogoImage from '../assets/logo.svg';
-import { useAppContext } from '../store';
+import { deleteAccessToken, getAccessToken } from '../utils/AxiosInstance';
 import './AppLayout.scss';
 
 function AppLayout({ children, sidebar }) {
   const navigate = useNavigate();
-  const {
-    store: { jwtToken },
-    // dispatch,
-  } = useAppContext();
+  const jwtToken = getAccessToken()?.length > 0;
 
   const menuItems = [
     {
@@ -43,7 +40,7 @@ function AppLayout({ children, sidebar }) {
 
   const onClick = (e) => {
     if (e.key === 'accounts/logout') {
-      localStorage.removeItem('jwtToken');
+      deleteAccessToken();
       navigate('/home');
       window.location.reload();
     } else {

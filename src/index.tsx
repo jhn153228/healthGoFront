@@ -1,15 +1,12 @@
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import Root from './pages';
-import { AppProvider } from './store';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
 
 root.render(
-  <AppProvider>
-    <BrowserRouter>
-      <Root />
-    </BrowserRouter>
-  </AppProvider>
+  <BrowserRouter>
+    <Root />
+  </BrowserRouter>
 );

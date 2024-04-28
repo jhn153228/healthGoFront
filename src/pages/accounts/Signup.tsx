@@ -1,9 +1,8 @@
 import { FrownOutlined, SmileOutlined } from '@ant-design/icons';
 import { Button, Form, Input, notification } from 'antd';
-import Axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { API_URL } from '../../constants/GlobalConstants';
+import axiosInstance from 'utils/AxiosInstance';
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -26,6 +25,8 @@ export default function Signup() {
     bench_1rm: any;
     deadlift_1rm: any;
     squat_1rm: any;
+    username: any;
+    email: any;
   }) => {
     async function fn() {
       console.log(values);
@@ -37,7 +38,7 @@ export default function Signup() {
       console.log('data:', data);
       //   예외처리
       try {
-        await Axios.post(`${API_URL}/accounts/signup/`, data);
+        await axiosInstance.post(`/accounts/signup/`, data);
 
         notification.open({
           message: '회원가입 성공',

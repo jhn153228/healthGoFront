@@ -15,20 +15,13 @@ import {
   Select,
   Space,
 } from 'antd';
-import Axios from 'axios';
-import { API_URL } from '../constants/GlobalConstants';
-import { useAppContext } from '../store';
+import axiosInstance, { getAccessToken } from '../utils/AxiosInstance';
 
 function Routine() {
   const buttonStyle = {
     fontSize: '20px',
     color: 'Gray',
   };
-
-  const {
-    store: { jwtToken },
-    // dispatch,
-  } = useAppContext();
 
   const [workDate, setWorkDate] = useState(''); // 날짜 상태
   const [RoutineData, setRoutineData] = useState([]); // 루틴 JSON(str) 데이터
@@ -45,34 +38,36 @@ function Routine() {
     const date_form = e.$y + '-' + (e.$M + 1) + '-' + e.$D;
 
     setWorkDate(date_form);
-    const headers = { Authorization: `JWT ${jwtToken}` };
-    Axios.get(`${API_URL}/api/routines/`, {
-      params: { work_date: date_form },
-      headers: headers,
-    })
-      .then((res) => {
-        const worksJson = JSON.parse(res.data[0].works_json);
-        const list_routine = worksJson.routine;
-        setRoutineData(list_routine);
-        setSubmitState('put'); // 기존 데이터 존재하므로 PUT
-      })
+    getAccessToken()?.length > 0 &&
+      axiosInstance
+        .get(`/api/routines/`, {
+          params: { work_date: date_form },
+        })
+        .then((res) => {
+          const worksJson = JSON.parse(res.data[0].works_json);
+          const list_routine = worksJson.routine;
+          setRoutineData(list_routine);
+          setSubmitState('put'); // 기존 데이터 존재하므로 PUT
+        })
 
-      .catch((err) => {
-        setSubmitState('post'); // 기존 데이터 없으므로 POST
-        setRoutineData([]); // 이전 데이터 초기화
-      });
+        .catch((err) => {
+          setSubmitState('post'); // 기존 데이터 없으므로 POST
+          setRoutineData([]); // 이전 데이터 초기화
+        });
   };
   // 운동종목 불러오기
   const options = [];
   const [workOuts, setWorkOuts] = useState([]);
   useEffect(() => {
-    Axios.get(`${API_URL}/workouts/`)
-      .then((res) => {
-        setWorkOuts(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    getAccessToken()?.length > 0 &&
+      axiosInstance
+        .get(`/workouts/` /*{ withCredentials: true }*/)
+        .then((res) => {
+          setWorkOuts(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
   }, []);
   workOuts.forEach((workout) => {
     options.push({ value: workout.work_name, label: workout.work_name });
@@ -105,18 +100,12 @@ function Routine() {
   };
   // 서브밋
   const onFinish = (formData) => {
-    const headers = { Authorization: `JWT ${jwtToken}` };
     if (submitState === 'put') {
-      Axios.put(
-        `${API_URL}/api/routines/1/`,
-        {
+      axiosInstance
+        .put(`/api/routines/1/`, {
           work_date: workDate,
           form_data: formData,
-        },
-        {
-          headers: headers,
-        }
-      )
+        })
         .then((res) => {
           console.log(res.data);
         })
@@ -125,16 +114,17 @@ function Routine() {
         });
     }
     if (submitState === 'post') {
-      Axios.post(
-        `${API_URL}/api/routines/`,
-        {
-          work_date: workDate,
-          form_data: formData,
-        },
-        {
-          headers: headers,
-        }
-      )
+      axiosInstance
+        .post(
+          `/api/routines`,
+          {
+            work_date: workDate,
+            form_data: formData,
+          },
+          {
+            withCredentials: true,
+          }
+        )
         .then((res) => {
           console.log(res.data);
         })
