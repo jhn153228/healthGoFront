@@ -42,7 +42,13 @@ function AppLayout({ children, sidebar }) {
   ];
 
   const onClick = (e) => {
-    navigate('/' + e.key);
+    if (e.key === 'accounts/logout') {
+      localStorage.removeItem('jwtToken');
+      navigate('/home');
+      window.location.reload();
+    } else {
+      navigate('/' + e.key);
+    }
   };
   return (
     <div className='app'>
